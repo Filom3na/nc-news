@@ -3,10 +3,12 @@ const app = express();
 const {getTopics} = require('./db/topics.controller');
 
 
-// const apiRouter = require("./topics.router");
-
 app.get('/api/topics', getTopics);
 
-                      
-// app.use('/api/topics', apiRouter);
+
+app.use((err, req, res, next)=> {
+    if(err.message === 'Topics not found') {
+        res.status(500).send({ msg: 'Internal Server Error' })
+}
+})
 module.exports = app;

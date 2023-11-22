@@ -39,5 +39,5 @@ describe('/api', () => {
       .then((res) => {
         expect(res.body).toEqual(endpoints);  
       });
-  });
+  })
 });

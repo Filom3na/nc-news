@@ -1,9 +1,13 @@
 const express = require('express');
 const app = express();
-const {getTopics} = require('./db/topics.controller');
-
+const {getTopics, getAPI} = require('./db/topics.controller');
 
 app.get('/api/topics', getTopics);
+app.get('/api', getAPI);
+
+app.use((err, req, res, next)=> {
+        res.status(500).send({ msg: 'Internal Server Error' })
+})
 
 
 app.use((err, req, res, next)=> {

@@ -1,4 +1,5 @@
 const db = require('../db/connection')
+const jsonfile = require('jsonfile')
 
 exports.fetchTopics = () => {
     return db.query(` SELECT * FROM topics`)
@@ -6,3 +7,7 @@ exports.fetchTopics = () => {
         return rows;
     })
 }
+
+exports.fetchEndpoints = () => {
+    return Promise.resolve(jsonfile.readFile('./endpoints.json'));
+  };

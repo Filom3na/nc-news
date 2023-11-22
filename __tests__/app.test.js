@@ -49,7 +49,7 @@ describe('GET /api/articles/:article_id', () => {
         .expect(200)
         .then(({ body }) => {
           const article = body.article;
-          
+
           expect(article).toMatchObject({
             author: expect.any(String),
             title: expect.any(String),
@@ -63,7 +63,7 @@ describe('GET /api/articles/:article_id', () => {
         });
     });
 
-  test('responds 404 for invalid id', () => {
+  test('responds 404 for id not found', () => {
       return request(app)
         .get('/api/articles/999')
         .expect(404)

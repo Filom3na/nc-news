@@ -11,4 +11,3 @@ exports.fetchTopics = () => {
 exports.fetchEndpoints = () => {
     return Promise.resolve(jsonfile.readFile('./endpoints.json'));
   };
-  

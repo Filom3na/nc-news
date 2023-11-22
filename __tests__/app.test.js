@@ -39,5 +39,37 @@ describe('/api', () => {
       .then((res) => {
         expect(res.body).toEqual(endpoints);  
       });
-  })
+  });
+});
+describe('GET /api/articles/:article_id', () => {
+
+  test('responds 200 with requested article', () => { 
+      return request(app)
+        .get('/api/articles/1')
+        .expect(200)
+        .then(({ body }) => {
+          const article = body.article;
+
+          expect(article).toMatchObject({
+            author: expect.any(String),
+            title: expect.any(String),
+            article_id: expect.any(Number),
+            body: expect.any(String),
+            topic: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+            article_img_url: expect.any(String)  
+          });
+        });
+    });
+
+  test('responds 404 for id not found', () => {
+      return request(app)
+        .get('/api/articles/999')
+        .expect(404)
+        .then(({ body }) =>  {
+          expect(body.msg).toBe('Article not found');
+        });
+  });
+   
 });

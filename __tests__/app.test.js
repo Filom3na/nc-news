@@ -123,18 +123,32 @@ test('articles do not have body property', () => {
 })
 
 describe('GET /api/articles/:article_id/comments', () => {
-    
+  
   test('respond with a 200 status and array of comments', () => { 
-      return request(app)
-        .get('/api/articles/1/comments')
-        .expect(200)
-        .then(({body}) => {
-           const {comments} = body;
-           expect(comments).toBeInstanceOf(Array);
-        });
-    });
-    
-    test('comments have required properties', () => {
+    return request(app)
+      .get('/api/articles/1/comments')
+      .expect(200)
+      .then(({body}) => {
+         const {comments} = body;
+         expect(comments).toBeInstanceOf(Array);
+      });
+  });
+
+  test('comments sorted descending by created_at date', () => {
+    return request(app)
+      .get('/api/articles/1/comments')
+      .expect(200)
+      .then(({body}) => {
+        const {comments} = body;
+        for(let i = 0; i < comments.length - 1; i++) {
+          const currentDate = new Date(comments[i].created_at);
+          const nextDate = new Date(comments[i+1].created_at);
+          expect(currentDate).toBeAfter(nextDate);  
+        }
+      });
+  });
+
+        test('comments have required properties', () => {
       return request(app)
         .get('/api/articles/1/comments')   
         .then(({body}) => {
@@ -149,5 +163,24 @@ describe('GET /api/articles/:article_id/comments', () => {
           })
         });
       })
-        
-        })
+
+      test('returns 404 for invalid article_id', () => {
+        return request(app)
+          .get('/api/articles/999/comments')
+          .expect(404)
+          .then(({ body }) =>  {
+            expect(body.msg).toBe('Article not found');
+          });
+      });
+    
+      test('returns empty array for valid article with no comments', () => {
+        return request(app)
+          .get('/api/articles/2/comments') 
+          .expect(200)
+          .then(({ body }) => {
+            expect(body.comments).toEqual([]); 
+          });
+      });
+  });
+
+

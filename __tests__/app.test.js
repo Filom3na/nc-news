@@ -12,8 +12,6 @@ afterAll(() => {
 
 
 describe (' GET /api/topics', () => {
-  
-  
     
       test('responds with topic objects containing required properties', () => {
         return request(app)
@@ -123,8 +121,6 @@ test('articles do not have body property', () => {
     
 
 })
-  
-  
 
 describe('GET /api/articles/:article_id/comments', () => {
     
@@ -154,12 +150,4 @@ describe('GET /api/articles/:article_id/comments', () => {
         });
       })
         
-        // test('returns 404 if article_id not found', () => {
-        //   return request(app)
-        //     .get('/api/articles/999/comments') 
-        //     .expect(404) 
-        //     .then(({ body }) =>  {
-        //       expect(body.msg).toBe('Article not found');
-        //     });  
-        //   })
         })

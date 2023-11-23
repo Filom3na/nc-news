@@ -16,17 +16,6 @@ exports.getArticles = (req, res, next) => {
     .catch(next);
 }
 
-// exports.getArticleComments = (req, res, next) => {
-//   const { article_id } = req.params;
-// fetchCommentsByArticleId(article_id)
-//     .then(comments => {
-//         if(!comments) { 
-//           return res.status(404).send({ message: 'Article not found' });
-//         }
-//       res.status(200).json({comments});
-//     })
-//     .catch(next);  
-// }
 exports.getArticleComments = (req, res, next) => {
   const { article_id } = req.params;
 fetchCommentsByArticleId(article_id)

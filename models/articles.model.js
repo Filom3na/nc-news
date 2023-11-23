@@ -11,7 +11,6 @@ exports.fetchArticleById = (id) => {
       return rows[0];
     })
   }
-  // articles.model.js
 
 exports.fetchArticles = () => {
   return db.query(`
@@ -33,3 +32,13 @@ ORDER BY articles.created_at DESC;
 return rows;
 }) 
 }
+
+exports.fetchCommentsByArticleId = (articleId) => {
+  return db.query(`
+    SELECT * FROM comments
+    WHERE article_id = $1 
+    ORDER BY created_at DESC;
+  `, [articleId])
+  .then(result => result.rows)
+}
+

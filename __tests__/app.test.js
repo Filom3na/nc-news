@@ -164,7 +164,7 @@ describe('GET /api/articles/:article_id/comments', () => {
         });
       })
 
-      test('returns 404 for invalid article_id', () => {
+      test('returns 404 for valid article_id but non existent', () => {
         return request(app)
           .get('/api/articles/999/comments')
           .expect(404)
@@ -179,6 +179,15 @@ describe('GET /api/articles/:article_id/comments', () => {
           .expect(200)
           .then(({ body }) => {
             expect(body.comments).toEqual([]); 
+          });
+      });
+
+      test('returns 400 if passed with a bad article_id data type', () => {
+        return request(app)
+          .get('/api/articles/not-an-id/comments')
+          .expect(400)
+          .then(({ body }) => {
+            expect(body.msg).toBe('Invalid article_id');  
           });
       });
   });

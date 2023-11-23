@@ -21,10 +21,9 @@ app.use((err, req, res, next)=> {
       }
 })
 
-app.use((err, req, res, next)=> {
-    if(err.message === 'Topics not found') {
-        res.status(500).send({ msg: 'Internal Server Error' })
-}
-})
-
+app.use((err, req, res, next) => {
+  if (err.code === '22P02') {
+    res.status(400).send({ msg: 'Invalid article_id' });
+  } else res.status(500).send({ msg: 'Internal Server Error' });
+});
 module.exports = app;   

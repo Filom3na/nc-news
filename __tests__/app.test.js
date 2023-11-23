@@ -84,7 +84,7 @@ describe('GET /api/articles', () => {
     .then(res => {
       expect(res.body.articles.length).toBe(13);
     });
-});
+  });
 
 test('articles have required properties', () => {
   return request(app)
@@ -120,5 +120,46 @@ test('articles do not have body property', () => {
         expect(dates).toEqual(copiedDates);
       });
   })
+    
 
-  })
+})
+  
+  
+
+describe('GET /api/articles/:article_id/comments', () => {
+    
+  test('respond with a 200 status and array of comments', () => { 
+      return request(app)
+        .get('/api/articles/1/comments')
+        .expect(200)
+        .then(({body}) => {
+           const {comments} = body;
+           expect(comments).toBeInstanceOf(Array);
+        });
+    });
+    
+    test('comments have required properties', () => {
+      return request(app)
+        .get('/api/articles/1/comments')   
+        .then(({body}) => {
+          const comment = body.comments[0];  
+          expect(comment).toEqual({
+            comment_id: expect.any(Number),
+            votes: expect.any(Number),
+            created_at: expect.any(String),
+            author: expect.any(String),
+            body: expect.any(String),  
+            article_id: 1     
+          })
+        });
+      })
+        
+        // test('returns 404 if article_id not found', () => {
+        //   return request(app)
+        //     .get('/api/articles/999/comments') 
+        //     .expect(404) 
+        //     .then(({ body }) =>  {
+        //       expect(body.msg).toBe('Article not found');
+        //     });  
+        //   })
+        })

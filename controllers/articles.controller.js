@@ -1,4 +1,4 @@
-const { fetchArticleById, fetchArticles } = require('../models/articles.model')
+const { fetchArticleById, fetchArticles,fetchCommentsByArticleId } = require('../models/articles.model')
 
 exports.getArticleById = (req, res, next) => {  
   fetchArticleById(req.params.article_id)
@@ -15,3 +15,23 @@ exports.getArticles = (req, res, next) => {
     })
     .catch(next);
 }
+
+// exports.getArticleComments = (req, res, next) => {
+//   const { article_id } = req.params;
+// fetchCommentsByArticleId(article_id)
+//     .then(comments => {
+//         if(!comments) { 
+//           return res.status(404).send({ message: 'Article not found' });
+//         }
+//       res.status(200).json({comments});
+//     })
+//     .catch(next);  
+// }
+exports.getArticleComments = (req, res, next) => {
+  const { article_id } = req.params;
+fetchCommentsByArticleId(article_id)
+    .then(comments => {
+              res.status(200).send({comments});        
+            })
+            .catch(next);  
+        }

@@ -73,3 +73,52 @@ describe('GET /api/articles/:article_id', () => {
   });
    
 });
+
+
+describe('GET /api/articles', () => {
+
+  test('responds with status 200', () => {
+    return request(app)
+    .get('/api/articles')
+    .expect(200)
+    .then(res => {
+      expect(res.body.articles.length).toBe(13);
+    });
+});
+
+test('articles have required properties', () => {
+  return request(app)
+    .get('/api/articles')
+    .expect(200)
+    .then(res => {
+      const article = res.body.articles[0];
+      expect(article).toMatchObject({
+        author: expect.any(String)  
+      });
+    });
+});
+
+test('articles do not have body property', () => {
+  return request(app)
+    .get('/api/articles')
+    .expect(200)
+    .then(res => {
+      const article = res.body.articles[0];
+      expect(article).not.toHaveProperty('body');
+    });
+});
+
+  test('articles sorted by created_at descending', () => {
+    return request(app)
+      .get('/api/articles')
+      .expect(200)
+      .then(res => {
+        const { articles } = res.body; 
+        const dates = articles.map(a => new Date(a.created_at));
+        const copiedDates = [...dates];
+        copiedDates.sort((a, b) => b - a);
+        expect(dates).toEqual(copiedDates);
+      });
+  })
+
+  })

@@ -66,7 +66,7 @@ describe('GET /api/articles/:article_id', () => {
         .get('/api/articles/999')
         .expect(404)
         .then(({ body }) =>  {
-          expect(body.msg).toBe('Article not found');
+          expect(body.msg).toBe('Not found');
         });
   });
    
@@ -169,7 +169,7 @@ describe('GET /api/articles/:article_id/comments', () => {
           .get('/api/articles/999/comments')
           .expect(404)
           .then(({ body }) =>  {
-            expect(body.msg).toBe('Article not found');
+            expect(body.msg).toBe('Not found');
           });
       });
     
@@ -187,9 +187,52 @@ describe('GET /api/articles/:article_id/comments', () => {
           .get('/api/articles/not-an-id/comments')
           .expect(400)
           .then(({ body }) => {
-            expect(body.msg).toBe('Invalid article_id');  
+            expect(body.msg).toBe('Bad request');  
           });
       });
   });
 
+
+describe('POST /api/articles/:articleId/comments', () => {
+
+  test('returns 201 and created comment', () => {
+    const newComment = {
+      author: 'icellusedkars',
+      body: 'This is a new comment'
+    };
+    return request(app)
+      .post('/api/articles/1/comments')
+      .send(newComment)
+      .expect(201)
+      .then(({body}) => {
+        expect(body.comment).toEqual({
+          comment_id: 19,
+          article_id: 1,
+          author: 'icellusedkars',
+          body: 'This is a new comment',
+          created_at: expect.any(String), 
+          votes: 0
+        });
+      });
+  });
+
+  test('returns 404 for non-existent article', () => {
+    return request(app)
+      .post('/api/articles/20/comments')
+      .expect(404)
+      .then(({body})=>  {
+            expect(body.msg).toBe('Not found');  
+          });
+})
+
+  test('returns 400 for invalid article ID', () => {
+   return request(app)
+      .post('/api/articles/no/comments')
+      .expect(400)
+      .then(({body})=>  {
+        expect(body.msg).toBe('Bad request');  
+      });
+  });
+
+})
 

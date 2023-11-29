@@ -27,4 +27,3 @@ exports.getArticleComments = (req, res, next) => {
     res.status(200).send({comments})
   }) .catch(next);  
 }
-
